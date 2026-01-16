@@ -4,7 +4,7 @@ import random
 
 
 # Konstanter
-SW, SH = 800, 800
+SW, SH = 800, 600
 
 
 
@@ -30,6 +30,23 @@ class Hogorm:
         self._død = False
 
     def update(self):
+        global apple
+
+        for firkant in self._kropp:
+            if self._hode.x == firkant.x and self._hode.y == firkant.y:
+              self._død = True
+            if self._hode.x not in range(0, SW) or self._hode.y not in range(0, SH):
+              self._død = True
+        if self._død:
+            self.x, self.y = BLOKK_STORELSE, BLOKK_STORELSE
+            self._hode = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
+            self._kropp = [pg.Rect(self._x-BLOKK_STORELSE, self._y, BLOKK_STORELSE, BLOKK_STORELSE)]
+            self._xdir = 1 
+            self._ydir = 0 
+            self._død = False
+            apple = Apple()
+
+
         self._kropp.append(self._hode)
         for i in range (len(self._kropp)-1):
           self._kropp[i].x, self._kropp[i].y = self._kropp[i + 1].x, self._kropp[i + 1].y
@@ -37,6 +54,16 @@ class Hogorm:
         self._hode.y += self._ydir * BLOKK_STORELSE
         self._kropp.remove(self._hode)
         
+class Apple:
+    def __init__(self):
+        self._x = int(random.randint(0, SW)/BLOKK_STORELSE) * BLOKK_STORELSE
+        self._y = int(random.randint(0, SH)/BLOKK_STORELSE) * BLOKK_STORELSE
+        self.rect = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
+
+
+    def update(self):
+      pg.draw.rect(skjerm, "red", self.rect)
+
 
 
 
@@ -49,7 +76,9 @@ def tegngygrid():
 
 
 tegngygrid()
-        
+
+apple = Apple()
+
 hogorm = Hogorm()
 
 while True:
@@ -79,12 +108,18 @@ while True:
 
     skjerm.fill('black')
     tegngygrid()
+
+    apple.update()
     
 
     pg.draw.rect(skjerm, "green", hogorm._hode)
 
     for firkant in hogorm._kropp:
        pg.draw.rect(skjerm, "green", firkant)
+    
+    if hogorm._hode.x == apple._x and hogorm._hode.y == apple._y:
+       hogorm._kropp.append(pg.Rect(firkant.x, firkant.y, BLOKK_STORELSE, BLOKK_STORELSE))
+       apple = Apple( )
   
   pg.display.update()
   klokke.tick(10)
