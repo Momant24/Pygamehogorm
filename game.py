@@ -6,7 +6,8 @@ import random
 # Konstanter
 SW, SH = 800, 600
 
-
+antall_spillere = None
+velg = True
 
 
 
@@ -21,32 +22,70 @@ skjerm = pg.display.set_mode((SW, SH))
 pg.display.set_caption("Hogorm")
 klokke = pg.time.Clock()
 
+while velg:
+    skjerm.fill("black")
+    tittel = FONT.render("HOGORM", True, "green")
+    tekst1 = FONT.render("Trykk 1 for 1 spiller", True, "white")
+    tekst2 = FONT.render("Trykk 2 for 2 spillere", True, "white")
+
+    skjerm.blit(tittel, (SW//2 - tittel.get_width()//2, SH//4))
+    skjerm.blit(tekst1, (SW//2 - tekst1.get_width()//2, SH//2))
+    skjerm.blit(tekst2, (SW//2 - tekst2.get_width()//2, SH//2 + 80))
+
+    pg.display.update()
+   
+    for hendelse in pg.event.get():
+        if hendelse.type == pg.QUIT:
+            pg.quit()
+            sys.exit()
+
+        if hendelse.type == pg.KEYDOWN:
+            if hendelse.key == pg.K_1:
+                antall_spillere = 1
+                velg = False 
+            elif hendelse.key == pg.K_2:
+               antall_spillere = 2
+               velg = False               
+
 
 class Hogorm:
-    def __init__(self):
-        self._x, self._y, = BLOKK_STORELSE,  BLOKK_STORELSE
+    def __init__(self, x, y, farge):
+        self._x, self._y, = x, y
         self._xdir = 1   
         self._ydir = 0
         self._hode = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
         self._kropp = [pg.Rect(self._x-BLOKK_STORELSE, self._y, BLOKK_STORELSE, BLOKK_STORELSE)]
         self._død = False
+        self._farge = farge
 
     def update(self):
-        global apple
+        global apples
 
         for firkant in self._kropp:
             if self._hode.x == firkant.x and self._hode.y == firkant.y:
               self._død = True
             if self._hode.x not in range(0, SW) or self._hode.y not in range(0, SH):
               self._død = True
-        if self._død:
-            self.x, self.y = BLOKK_STORELSE, BLOKK_STORELSE
-            self._hode = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
-            self._kropp = [pg.Rect(self._x-BLOKK_STORELSE, self._y, BLOKK_STORELSE, BLOKK_STORELSE)]
-            self._xdir = 1 
-            self._ydir = 0 
-            self._død = False
-            apple = Apple()
+        if antall_spillere == 1:
+            if self._død:
+                self.x, self.y = BLOKK_STORELSE, BLOKK_STORELSE
+                self._hode = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
+                self._kropp = [pg.Rect(self._x-BLOKK_STORELSE, self._y, BLOKK_STORELSE, BLOKK_STORELSE)]
+                self._xdir = 1 
+                self._ydir = 0 
+                self._død = False
+                apple = Apple()
+        else:
+            if self._død:
+                
+                self.x, self.y = BLOKK_STORELSE, BLOKK_STORELSE
+                self._hode = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
+                self._kropp = [pg.Rect(self._x-BLOKK_STORELSE, self._y, BLOKK_STORELSE, BLOKK_STORELSE)]
+                self._xdir = 1 
+                self._ydir = 0 
+                self._død = False
+                apple = Apple()
+
 
 
         self._kropp.append(self._hode)
@@ -80,9 +119,17 @@ score_rect = score.get_rect(center=(SW/2, SH/20))
 
 tegngygrid()
 
-apple = Apple()
+if antall_spillere == 1:
+    apples = [Apple()]
+else:
+    apples = [Apple(), Apple()]
 
-hogorm = Hogorm()
+hogorm1 = Hogorm(50, 50, "green")
+
+if antall_spillere == 2:
+   hogorm2 = Hogorm(700, 550, "blue")
+
+
 
 
 
@@ -93,42 +140,76 @@ while True:
             sys.exit()
 
         if hendelse.type == pg.KEYDOWN:
-            if hendelse.key == pg.K_DOWN:
-                hogorm._ydir = 1
-                hogorm._xdir = 0
-            elif hendelse.key == pg.K_UP:
-                hogorm._ydir = -1
-                hogorm._xdir = 0
-            elif hendelse.key == pg.K_RIGHT:
-                hogorm._ydir = 0
-                hogorm._xdir = 1
-            elif hendelse.key == pg.K_LEFT:
-                hogorm._ydir = 0
-                hogorm._xdir = -1
+            if hendelse.key == pg.K_s:
+                hogorm1._ydir = 1
+                hogorm1._xdir = 0
+            elif hendelse.key == pg.K_w:
+                hogorm1._ydir = -1
+                hogorm1._xdir = 0
+            elif hendelse.key == pg.K_d:
+                hogorm1._ydir = 0
+                hogorm1._xdir = 1
+            elif hendelse.key == pg.K_a:
+                hogorm1._ydir = 0
+                hogorm1._xdir = -1
+
+            if antall_spillere == 2:
+                if hendelse.key == pg.K_DOWN:
+                    hogorm2._ydir = 1
+                    hogorm2._xdir = 0
+                elif hendelse.key == pg.K_UP:
+                    hogorm2._ydir = -1
+                    hogorm2._xdir = 0
+                elif hendelse.key == pg.K_RIGHT:
+                    hogorm2._ydir = 0
+                    hogorm2._xdir = 1
+                elif hendelse.key == pg.K_LEFT:
+                    hogorm2._ydir = 0
+                    hogorm2._xdir = -1
+               
           
           
 
 
-    hogorm.update()
+    hogorm1.update()
+ 
+
+        
+            
+
 
     skjerm.fill('black')
     tegngygrid()
 
-    apple.update()
+    for apple in apples:
+        apple.update()
+
+
+    pg.draw.rect(skjerm, "green", hogorm1._hode)
     
-    score = FONT.render(f"{len(hogorm._kropp) + 1}", True, "white")
+    if antall_spillere == 2:
+        hogorm2.update()
 
-    pg.draw.rect(skjerm, "green", hogorm._hode)
+        pg.draw.rect(skjerm, "blue", hogorm2._hode)
 
-    for firkant in hogorm._kropp:
+        for firkant in hogorm2._kropp:
+            pg.draw.rect(skjerm, "blue", firkant)
+
+    for firkant in hogorm1._kropp:
        pg.draw.rect(skjerm, "green", firkant)
 
-    skjerm.blit(score, score_rect)
 
-    if hogorm._hode.x == apple._x and hogorm._hode.y == apple._y:
-       hogorm._kropp.append(pg.Rect(firkant.x, firkant.y, BLOKK_STORELSE, BLOKK_STORELSE))
-       apple = Apple( )
-  
+
+    for i, apple in enumerate(apples):
+        if hogorm1._hode.colliderect(apple.rect):
+            hogorm1._kropp.append(pg.Rect(firkant.x, firkant.y, BLOKK_STORELSE, BLOKK_STORELSE))
+            apples[i] = Apple()
+
+        if antall_spillere == 2:
+            if hogorm2._hode.colliderect(apple.rect):
+                hogorm2._kropp.append(pg.Rect(firkant.x, firkant.y, BLOKK_STORELSE, BLOKK_STORELSE))
+                apples[i] = Apple()
+
     pg.display.update()
     klokke.tick(5)
 
