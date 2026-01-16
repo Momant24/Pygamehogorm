@@ -87,24 +87,24 @@ hogorm = Hogorm()
 
 
 while True:
-  for hendelse in pg.event.get():
-    if hendelse.type == pg.QUIT:
-      pg.quit()
-      sys.exit()
-    
-    if hendelse.type == pg.KEYDOWN:
-        if hendelse.key == pg.K_DOWN:
-          hogorm._ydir = 1
-          hogorm._xdir = 0
-        elif hendelse.key == pg.K_UP:
-          hogorm._ydir = -1
-          hogorm._xdir = 0
-        elif hendelse.key == pg.K_RIGHT:
-          hogorm._ydir = 0
-          hogorm._xdir = 1
-        elif hendelse.key == pg.K_LEFT:
-          hogorm._ydir = 0
-          hogorm._xdir = -1
+    for hendelse in pg.event.get():
+        if hendelse.type == pg.QUIT:
+            pg.quit()
+            sys.exit()
+
+        if hendelse.type == pg.KEYDOWN:
+            if hendelse.key == pg.K_DOWN:
+                hogorm._ydir = 1
+                hogorm._xdir = 0
+            elif hendelse.key == pg.K_UP:
+                hogorm._ydir = -1
+                hogorm._xdir = 0
+            elif hendelse.key == pg.K_RIGHT:
+                hogorm._ydir = 0
+                hogorm._xdir = 1
+            elif hendelse.key == pg.K_LEFT:
+                hogorm._ydir = 0
+                hogorm._xdir = -1
           
           
 
@@ -129,7 +129,7 @@ while True:
        hogorm._kropp.append(pg.Rect(firkant.x, firkant.y, BLOKK_STORELSE, BLOKK_STORELSE))
        apple = Apple( )
   
-  pg.display.update()
-  klokke.tick(10)
+    pg.display.update()
+    klokke.tick(5)
 
 
