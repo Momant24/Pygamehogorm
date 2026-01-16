@@ -15,6 +15,8 @@ pg.init()
 
 BLOKK_STORELSE = 50
 
+FONT = pg.font.Font("Pygame/Pygamehogorm/font.ttf", BLOKK_STORELSE*2)
+
 skjerm = pg.display.set_mode((SW, SH))
 pg.display.set_caption("Hogorm")
 klokke = pg.time.Clock()
@@ -73,13 +75,16 @@ def tegngygrid():
       rect = pg.Rect(x, y, BLOKK_STORELSE, BLOKK_STORELSE)
       pg.draw.rect(skjerm, "#3c3c3b", rect, 1)
 
-
+score = FONT.render("1", True, "white")
+score_rect = score.get_rect(center=(SW/2, SH/20))
 
 tegngygrid()
 
 apple = Apple()
 
 hogorm = Hogorm()
+
+
 
 while True:
   for hendelse in pg.event.get():
@@ -111,12 +116,15 @@ while True:
 
     apple.update()
     
+    score = FONT.render(f"{len(hogorm._kropp) + 1}", True, "white")
 
     pg.draw.rect(skjerm, "green", hogorm._hode)
 
     for firkant in hogorm._kropp:
        pg.draw.rect(skjerm, "green", firkant)
-    
+
+    skjerm.blit(score, score_rect)
+
     if hogorm._hode.x == apple._x and hogorm._hode.y == apple._y:
        hogorm._kropp.append(pg.Rect(firkant.x, firkant.y, BLOKK_STORELSE, BLOKK_STORELSE))
        apple = Apple( )
