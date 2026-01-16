@@ -66,25 +66,17 @@ class Hogorm:
               self._død = True
             if self._hode.x not in range(0, SW) or self._hode.y not in range(0, SH):
               self._død = True
-        if antall_spillere == 1:
-            if self._død:
-                self.x, self.y = BLOKK_STORELSE, BLOKK_STORELSE
-                self._hode = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
-                self._kropp = [pg.Rect(self._x-BLOKK_STORELSE, self._y, BLOKK_STORELSE, BLOKK_STORELSE)]
-                self._xdir = 1 
-                self._ydir = 0 
-                self._død = False
-                apple = Apple()
-        else:
-            if self._død:
+            
+        
+        if self._død:
+            self.x, self.y = BLOKK_STORELSE, BLOKK_STORELSE
+            self._hode = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
+            self._kropp = [pg.Rect(self._x-BLOKK_STORELSE, self._y, BLOKK_STORELSE, BLOKK_STORELSE)]
+            self._xdir = 1 
+            self._ydir = 0 
+            self._død = False
                 
-                self.x, self.y = BLOKK_STORELSE, BLOKK_STORELSE
-                self._hode = pg.Rect(self._x, self._y, BLOKK_STORELSE, BLOKK_STORELSE)
-                self._kropp = [pg.Rect(self._x-BLOKK_STORELSE, self._y, BLOKK_STORELSE, BLOKK_STORELSE)]
-                self._xdir = 1 
-                self._ydir = 0 
-                self._død = False
-                apple = Apple()
+
 
 
 
@@ -127,7 +119,7 @@ else:
 hogorm1 = Hogorm(50, 50, "green")
 
 if antall_spillere == 2:
-   hogorm2 = Hogorm(700, 550, "blue")
+   hogorm2 = Hogorm(50, 550, "blue")
 
 
 
@@ -186,7 +178,7 @@ while True:
 
 
     pg.draw.rect(skjerm, "green", hogorm1._hode)
-    
+
     if antall_spillere == 2:
         hogorm2.update()
 
@@ -194,6 +186,20 @@ while True:
 
         for firkant in hogorm2._kropp:
             pg.draw.rect(skjerm, "blue", firkant)
+        
+        if hogorm1._hode.colliderect(hogorm2._hode):
+            hogorm1._død = True
+        
+        for firkant in hogorm2._kropp:
+            if hogorm1._hode.colliderect(firkant):
+                hogorm1._død = True
+        
+        if hogorm2._hode.colliderect(hogorm1._hode):
+            hogorm2._død = True
+        
+        for firkant in hogorm1._kropp:
+            if hogorm2._hode.colliderect(firkant):
+                hogorm2._død = True
 
     for firkant in hogorm1._kropp:
        pg.draw.rect(skjerm, "green", firkant)
@@ -202,12 +208,14 @@ while True:
 
     for i, apple in enumerate(apples):
         if hogorm1._hode.colliderect(apple.rect):
-            hogorm1._kropp.append(pg.Rect(firkant.x, firkant.y, BLOKK_STORELSE, BLOKK_STORELSE))
+            sist = hogorm1._kropp[-1]
+            hogorm1._kropp.append(pg.Rect(sist.x, sist.y, BLOKK_STORELSE, BLOKK_STORELSE))
             apples[i] = Apple()
 
         if antall_spillere == 2:
             if hogorm2._hode.colliderect(apple.rect):
-                hogorm2._kropp.append(pg.Rect(firkant.x, firkant.y, BLOKK_STORELSE, BLOKK_STORELSE))
+                sist2 = hogorm2._kropp[-1]
+                hogorm2._kropp.append(pg.Rect(sist2.x, sist2.y, BLOKK_STORELSE, BLOKK_STORELSE))
                 apples[i] = Apple()
 
     pg.display.update()
