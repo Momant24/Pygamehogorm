@@ -16,7 +16,7 @@ pg.init()
 
 BLOKK_STORELSE = 50
 
-FONT = pg.font.Font("Pygame/Pygamehogorm/font.ttf", BLOKK_STORELSE*2)
+FONT = pg.font.Font("Pygame/Pygamehogorm/font.ttf", BLOKK_STORELSE)
 
 skjerm = pg.display.set_mode((SW, SH))
 pg.display.set_caption("Hogorm")
@@ -47,6 +47,8 @@ while velg:
                antall_spillere = 2
                velg = False               
 
+if antall_spillere == 2:
+    BLOKK_STORELSE = 25
 
 class Hogorm:
     def __init__(self, x, y, farge):
@@ -109,6 +111,7 @@ def tegngygrid():
 score = FONT.render("1", True, "white")
 score_rect = score.get_rect(center=(SW/2, SH/20))
 
+
 tegngygrid()
 
 if antall_spillere == 1:
@@ -122,8 +125,9 @@ if antall_spillere == 2:
    hogorm2 = Hogorm(50, 550, "blue")
 
 
-
-
+høyeste = 0
+høyeste1 = 0
+høyeste2 = 0
 
 while True:
     for hendelse in pg.event.get():
@@ -204,7 +208,28 @@ while True:
     for firkant in hogorm1._kropp:
        pg.draw.rect(skjerm, "green", firkant)
 
+    if antall_spillere == 1:
+        nåscore = len(hogorm1._kropp) + 1
+        if nåscore >= høyeste:
+            høyeste = nåscore
+        
+        score = FONT.render(f"Beste: {høyeste}", True, "white")
+        skjerm.blit(score, (SW/2 - score.get_width()//2, 10))
 
+    else:
+        nåscore1 = len(hogorm1._kropp) + 1
+        nåscore2 = len(hogorm2._kropp) + 1
+        if nåscore1 >= høyeste1:
+            høyeste1 = nåscore1
+        
+        score = FONT.render(f"Beste Grønn: {høyeste1}", True, "white")
+        skjerm.blit(score, (SW/4 - score.get_width()//2, 10))
+
+        if nåscore2 >= høyeste2:
+            høyeste2 = nåscore2
+        
+        score2 = FONT.render(f"Beste Blå: {høyeste2}", True, "white")
+        skjerm.blit(score2, (SW/1.5 - score2.get_width()//2, 10))
 
     for i, apple in enumerate(apples):
         if hogorm1._hode.colliderect(apple.rect):
