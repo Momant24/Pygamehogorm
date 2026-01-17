@@ -136,30 +136,30 @@ while True:
             sys.exit()
 
         if hendelse.type == pg.KEYDOWN:
-            if hendelse.key == pg.K_s:
+            if hendelse.key == pg.K_s and hogorm1._ydir != -1:
                 hogorm1._ydir = 1
                 hogorm1._xdir = 0
-            elif hendelse.key == pg.K_w:
+            elif hendelse.key == pg.K_w and hogorm1._ydir != 1:
                 hogorm1._ydir = -1
                 hogorm1._xdir = 0
-            elif hendelse.key == pg.K_d:
+            elif hendelse.key == pg.K_d and hogorm1._xdir != -1:
                 hogorm1._ydir = 0
                 hogorm1._xdir = 1
-            elif hendelse.key == pg.K_a:
+            elif hendelse.key == pg.K_a and hogorm1._xdir != 1:
                 hogorm1._ydir = 0
                 hogorm1._xdir = -1
 
             if antall_spillere == 2:
-                if hendelse.key == pg.K_DOWN:
+                if hendelse.key == pg.K_DOWN and hogorm2._ydir != -1:
                     hogorm2._ydir = 1
                     hogorm2._xdir = 0
-                elif hendelse.key == pg.K_UP:
+                elif hendelse.key == pg.K_UP and hogorm2._ydir != 1:
                     hogorm2._ydir = -1
                     hogorm2._xdir = 0
-                elif hendelse.key == pg.K_RIGHT:
+                elif hendelse.key == pg.K_RIGHT and hogorm2._xdir != -1:
                     hogorm2._ydir = 0
                     hogorm2._xdir = 1
-                elif hendelse.key == pg.K_LEFT:
+                elif hendelse.key == pg.K_LEFT and hogorm2._xdir != 1:
                     hogorm2._ydir = 0
                     hogorm2._xdir = -1
                
