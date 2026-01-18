@@ -16,7 +16,8 @@ pg.init()
 
 BLOKK_STORELSE = 50
 
-FONT = pg.font.Font("Pygame/Pygamehogorm/font.ttf", BLOKK_STORELSE)
+# Font størrelse og utsene 
+FONT = pg.font.Font("Pygame/Pygamehogorm/font.ttf", 30)
 
 skjerm = pg.display.set_mode((SW, SH))
 pg.display.set_caption("Hogorm")
